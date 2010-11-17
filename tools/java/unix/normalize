@@ -1,0 +1,4 @@
+#!/bin/csh -f
+
+setenv CLASSPATH `dirname $0`/../../../lib/vrsnIdna-4.0.jar
+java com.vgrs.xcode.cmdline.idna.NormalizeCmdLine $*

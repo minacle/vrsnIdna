@@ -1,0 +1,190 @@
+<!--
+#############################################################################
+#
+#    The information in this document is proprietary
+#    to VeriSign and the VeriSign Registry Business.
+#    It may not be used, reproduced or disclosed without
+#    the written approval of the General Manager of
+#    VeriSign Global Registry Services.
+#
+#    PRIVILEDGED AND CONFIDENTIAL
+#    VERISIGN PROPRIETARY INFORMATION
+#    REGISTRY SENSITIVE INFORMATION
+#
+#    Copyright (c) 2001 VeriSign, Inc.  All rights reserved.
+#
+##############################################################################
+-->
+
+
+<project name="IDNSDK" default="all" basedir="..">
+
+
+	<!-- project definition properties -->
+	<property name="Title" value="IDNSDK" />
+	<property name="Year" value="2010" />
+	<property name="Publisher" value="VeriSign Inc." />
+	<property name="version" value="4.0" />
+	<property name="Main-Class" value="com.vgrs.xcode.gui.Converter" />
+
+	<!-- compiler option properties -->
+	<property name="build.compiler" value="classic" />
+	<property name="debug" value="on" />
+	<property name="optimize" value="on" />
+	<property name="deprecation" value="on" />
+
+	<!-- project path properties -->
+	<property name="doc.dir" value="${basedir}/documentation" />
+	<property name="java.dir" value="${basedir}/api/java" />
+	<property name="class.dir" value="${basedir}/obj" />
+	<property name="api.dir" value="${basedir}/api" />
+	<property name="data.dir" value="${basedir}/data" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="javadoc.dir" value="${doc.dir}/javadoc" />
+	<property name="xcode.dir" value="${java.dir}/com/vgrs/xcode" />
+	<property name="gui.dir" value="${xcode.dir}/gui" />
+	<property name="util.dir" value="${xcode.dir}/util" />
+	<property name="jar.file" value="vrsnIdna" />
+	<property name="manifest.file" value="manifest.mf" />
+	<path id="compile.path">
+		<pathelement location="${lib.dir}/junit-4.4.jar" />
+		<pathelement location="${lib.dir}/junit.jar" />
+	</path>
+	<path id="source.path">
+		<pathelement path="${java.dir}" />
+		<pathelement path="${basedir}/gnu/java" />
+		<pathelement path="${basedir}/cmdline/java" />
+	</path>
+
+
+	<!-- ======================================================================= -->
+
+
+
+	<!-- =================================================================== -->
+	<!-- A L L                                                               -->
+	<!-- =================================================================== -->
+	<target name="all" depends="javadoc,jar" description="Creates all products">
+	</target>
+
+
+
+	<!-- =================================================================== -->
+	<!-- P R E - C O M P I L E                                               -->
+	<!-- =================================================================== -->
+	<target name="pre-compile" description="Compiles and runs logic required by the compilation step">
+
+		<mkdir dir="${class.dir}" />
+		<javac destdir="${class.dir}" debug="${debug}" optimize="${optimize}" failonerror="true" deprecation="true">
+			<!-- <src path="${java.dir}" /> -->
+			<src>
+				<path refid="source.path" />
+			</src>
+			<include name="com/vgrs/xcode/util/XcodeErrorGenerator.java" />
+			<classpath>
+				<path refid="compile.path" />
+				<pathelement path="${class.dir}" />
+			</classpath>
+		</javac>
+
+		<java classname="com.vgrs.xcode.util.XcodeErrorGenerator">
+			<arg value="${data.dir}/util/ErrorCodes.txt" />
+			<arg value="${util.dir}/XcodeError.java" />
+			<classpath>
+				<path refid="compile.path" />
+				<pathelement path="${class.dir}" />
+			</classpath>
+		</java>
+
+	</target>
+
+
+
+	<!-- =================================================================== -->
+	<!-- J A V A D O C                                                       -->
+	<!-- =================================================================== -->
+	<target name="javadoc" depends="pre-compile" description="Creates java documentation">
+		<mkdir dir="${javadoc.dir}" />
+		<javadoc destdir="${javadoc.dir}" windowtitle="Internationalized Domain Name SDK API Specification">
+			<doctitle>
+				<![CDATA[Internationalized Domain Name SDK API Specification]]>
+			</doctitle>
+			<bottom>
+				<![CDATA[<i>Copyright &#169; 2000-2010 VeriSign Inc. All Rights Reserved</i>]]>
+  			</bottom>
+		<packageset dir="${java.dir}" defaultexcludes="yes">
+			<include name="com/vgrs/xcode/**" />
+		</packageset>
+		<packageset dir="${basedir}/gnu/java" defaultexcludes="yes">
+			<include name="gnu/trove/**" />
+		</packageset>
+		<packageset dir="${basedir}/cmdline/java" defaultexcludes="yes">
+			<include name="com/vgrs/xcode/**" />
+		</packageset>
+	</javadoc>
+</target>
+
+
+
+<!-- =================================================================== -->
+<!-- C O M P I L E                                                       -->
+<!-- =================================================================== -->
+<target name="compile" depends="pre-compile" description="Compiles all source files">
+	<mkdir dir="${class.dir}" />
+	<javac destdir="${class.dir}" debug="${debug}" optimize="${optimize}" failonerror="true" deprecation="true">
+		<src>
+			<path refid="source.path" />
+		</src>
+		<include name="com/vgrs/xcode/**" />
+		<classpath>
+			<path refid="compile.path" />
+			<pathelement path="${class.dir}" />
+		</classpath>
+	</javac>
+</target>
+
+
+
+<!-- =================================================================== -->
+<!-- J A R                                                               -->
+<!-- =================================================================== -->
+<target name="jar" depends="compile" description="Creates the jar file">
+
+	<delete file="${lib.dir}/${jar.file}-${version}.jar" />
+
+	<jar jarfile="${lib.dir}/${jar.file}-${version}.jar">
+		<manifest>
+			<attribute name="Main-Class" value="${Main-Class}" />
+			<attribute name="Class-Path" value="." />
+		</manifest>
+		<fileset dir="${class.dir}" />
+		<fileset dir="${basedir}">
+			<include name="data/**" />
+		</fileset>
+		<fileset dir="${gui.dir}">
+			<include name="images/**/*.gif" />
+		</fileset>
+	</jar>
+	<delete file="${manifest.file}" />
+</target>
+
+
+
+<!-- =================================================================== -->
+<!-- C L E A N                                                           -->
+<!-- =================================================================== -->
+<target name="clean" description="Deletes files created during compilation">
+	<delete file="${lib.dir}/${jar.file}-${version}.jar" />
+	<delete dir="${class.dir}" />
+	<delete dir="${javadoc.dir}" />
+</target>
+
+
+
+<!-- ======================================================================= -->
+
+
+</project>
+
+
+<!-- End of file -->

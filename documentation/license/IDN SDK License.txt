@@ -4,7 +4,7 @@
 /*                                                                       */
 /* A library for encoding / decoding of domain strings.                  */
 /*                                                                       */
-/* (c) VeriSign Inc., 2010, All rights reserved                          */
+/* (c) VeriSign Inc., 2011, All rights reserved                          */
 /*                                                                       */
 /*************************************************************************/
 

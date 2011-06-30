@@ -4,7 +4,7 @@ VeriSign IDNA XCode (encode/decode) ANSI c Library
 
 A library for encoding / decoding of IDN domains and labels.
 
-(c) VeriSign Inc., 2002-2010, All rights reserved
+(c) VeriSign Inc., 2002-2011, All rights reserved
 ******************************************************************
 ******************************************************************
 

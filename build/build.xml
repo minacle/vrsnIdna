@@ -22,9 +22,9 @@
 
 	<!-- project definition properties -->
 	<property name="Title" value="IDNSDK" />
-	<property name="Year" value="2010" />
+	<property name="Year" value="2011" />
 	<property name="Publisher" value="VeriSign Inc." />
-	<property name="version" value="4.0" />
+	<property name="version" value="4.1" />
 	<property name="Main-Class" value="com.vgrs.xcode.gui.Converter" />
 
 	<!-- compiler option properties -->

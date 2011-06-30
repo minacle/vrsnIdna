@@ -1,6 +1,9 @@
 Verisign IDNSDK Release Notes                             
    History of public changes
-   August 25th, 2010
+   June 28th, 2011
+
+Version 4.1
+   This version of IDNSDK uses the Unicode 6.0 data files.
 
 Version 4.0
    This version of the IDNSDK implements the IDNA2008 RFCs. The jar file vrsnIdna-4.0.jar 
